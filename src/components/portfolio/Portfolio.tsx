@@ -5,7 +5,6 @@ import {
   Code2,
   Cpu,
   Database,
-  Download,
   Github,
   Globe,
   GraduationCap,
