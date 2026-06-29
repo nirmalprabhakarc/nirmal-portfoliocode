@@ -81,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Portfolio of Nirmal Prabhakar Chirukui — Full-Stack Web Developer, AI Automation Specialist, Google Ads Expert and Data Analyst based in Berlin." },
       { name: "author", content: "Nirmal Prabhakar Chirukui" },
       { property: "og:title", content: "Nirmal Prabhakar Chirukui — Full-Stack Developer & AI Specialist" },
-      { property: "og:description", content: "Full-Stack Developer, AI Automation Specialist, Google Ads Expert and Data Analyst. Open to work and freelance projects." },
+      { property: "og:description", content: "Portfolio of Nirmal Prabhakar Chirukui — Full-Stack Web Developer, AI Automation Specialist, Google Ads Expert and Data Analyst based in Berlin." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Nirmal Prabhakar Chirukui — Full-Stack Developer & AI Specialist" },
+      { name: "twitter:description", content: "Portfolio of Nirmal Prabhakar Chirukui — Full-Stack Web Developer, AI Automation Specialist, Google Ads Expert and Data Analyst based in Berlin." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0f86f62b-b41c-40ce-a9e9-111173d504d7/id-preview-4897f418--f91446e5-8f08-408d-bd28-eb165d7959ff.lovable.app-1782728743205.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0f86f62b-b41c-40ce-a9e9-111173d504d7/id-preview-4897f418--f91446e5-8f08-408d-bd28-eb165d7959ff.lovable.app-1782728743205.png" },
     ],
     links: [
       {
