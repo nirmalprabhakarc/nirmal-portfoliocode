@@ -295,10 +295,12 @@ function Hero() {
                 { k: "3+", v: "Years Exp" },
                 { k: "100%", v: "Client Focus" },
               ].map((s) => (
-                <div key={s.v} className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-gradient">{s.k}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
-                </div>
+                <TiltCard key={s.v} className="card-3d hover-glow">
+                  <div className="glass rounded-xl p-4 text-center">
+                    <div className="text-2xl font-bold text-gradient">{s.k}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
+                  </div>
+                </TiltCard>
               ))}
             </div>
           </div>
