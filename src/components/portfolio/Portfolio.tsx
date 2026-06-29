@@ -5,7 +5,6 @@ import {
   Code2,
   Cpu,
   Database,
-  Download,
   Github,
   Globe,
   GraduationCap,
@@ -239,11 +238,6 @@ function Hero() {
               <a href="#projects">
                 <Button size="lg" variant="outline" className="glass border-white/15 hover:bg-white/5 gap-2">
                   <Briefcase className="h-4 w-4" /> View Portfolio
-                </Button>
-              </a>
-              <a href="/resume.pdf" download>
-                <Button size="lg" variant="outline" className="glass border-white/15 hover:bg-white/5 gap-2">
-                  <Download className="h-4 w-4" /> Download Resume
                 </Button>
               </a>
               <a href="#contact">
@@ -772,15 +766,6 @@ export function Portfolio() {
       <Footer />
       <Toaster />
       <style>{`
-        @media (prefers-reduced-motion: no-preference) {
-          [data-reveal]:not(.reveal-in) {
-            opacity: 0;
-            transform: translateY(24px);
-          }
-          [data-reveal] {
-            transition: opacity .3s ease, transform .3s ease;
-          }
-        }
         .reveal-in { opacity: 1 !important; transform: none !important; }
       `}</style>
     </div>
