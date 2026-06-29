@@ -536,7 +536,7 @@ function Projects() {
       title: "Krishikan Website",
       desc: "Developed a responsive business website using WordPress.",
       tags: ["WordPress", "Responsive Design"],
-      live: "#",
+      live: "https://krishikan.com/",
       gh: null,
       accent: "from-primary to-accent",
     },
