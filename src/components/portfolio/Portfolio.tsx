@@ -72,6 +72,49 @@ function useReveal() {
   }, []);
 }
 
+function useTilt<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [style, setStyle] = useState<React.CSSProperties>({});
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      const rx = (y - 0.5) * -10;
+      const ry = (x - 0.5) * 10;
+      setStyle({
+        transform: `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`,
+        transition: "transform 0.1s ease-out",
+      });
+    };
+    const onLeave = () => {
+      setStyle({
+        transform: "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
+        transition: "transform 0.5s ease-out",
+      });
+    };
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+  return { ref, style };
+}
+
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { ref, style } = useTilt<HTMLDivElement>();
+  return (
+    <div ref={ref} style={style} className={className}>
+      {children}
+    </div>
+  );
+}
+
+
 function Typewriter({ words }: { words: string[] }) {
   const [idx, setIdx] = useState(0);
   const [sub, setSub] = useState(0);
@@ -252,10 +295,12 @@ function Hero() {
                 { k: "3+", v: "Years Exp" },
                 { k: "100%", v: "Client Focus" },
               ].map((s) => (
-                <div key={s.v} className="glass rounded-xl p-4 text-center">
-                  <div className="text-2xl font-bold text-gradient">{s.k}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
-                </div>
+                <TiltCard key={s.v} className="card-3d hover-glow">
+                  <div className="glass rounded-xl p-4 text-center">
+                    <div className="text-2xl font-bold text-gradient">{s.k}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{s.v}</div>
+                  </div>
+                </TiltCard>
               ))}
             </div>
           </div>
@@ -319,36 +364,40 @@ function About() {
       <div className="mx-auto max-w-6xl px-4">
         <SectionHeader eyebrow="About me" title="Developer. Strategist. Builder." />
         <div className="grid md:grid-cols-3 gap-6">
-          <div data-reveal className="reveal md:col-span-2 glass rounded-2xl p-8">
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Nirmal is a passionate developer specializing in modern web development, AI
-              automation, digital marketing, and analytics. He enjoys building scalable
-              applications, automating business workflows, and helping companies grow through
-              technology and performance marketing.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {tags.map((t) => (
-                <span key={t} className="rounded-full glass-strong px-3 py-1.5 text-xs">
-                  {t}
-                </span>
-              ))}
+          <TiltCard className="card-3d hover-glow md:col-span-2" data-reveal>
+            <div className="reveal glass rounded-2xl p-8">
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Nirmal is a passionate developer specializing in modern web development, AI
+                automation, digital marketing, and analytics. He enjoys building scalable
+                applications, automating business workflows, and helping companies grow through
+                technology and performance marketing.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {tags.map((t) => (
+                  <span key={t} className="rounded-full glass-strong px-3 py-1.5 text-xs">
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          </TiltCard>
           <div data-reveal className="reveal grid gap-4">
             {[
               { icon: MapPin, label: "Location", value: "Berlin, Germany" },
               { icon: Briefcase, label: "Status", value: "Open to Work" },
               { icon: GraduationCap, label: "Education", value: "M.Sc. in AI & Data" },
             ].map((c) => (
-              <div key={c.label} className="glass rounded-2xl p-5 flex items-center gap-4">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <div className="min-w-0">
-                  <div className="text-xs text-muted-foreground">{c.label}</div>
-                  <div className="font-semibold truncate">{c.value}</div>
+              <TiltCard key={c.label} className="card-3d hover-glow" data-reveal>
+                <div className="reveal glass rounded-2xl p-5 flex items-center gap-4">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
+                    <c.icon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs text-muted-foreground">{c.label}</div>
+                    <div className="font-semibold truncate">{c.value}</div>
+                  </div>
                 </div>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -391,11 +440,13 @@ function Education() {
                   <div className={`absolute left-4 md:left-1/2 -translate-x-1/2 grid h-8 w-8 place-items-center rounded-full bg-gradient-primary shadow-glow`}>
                     <it.icon className="h-4 w-4" />
                   </div>
-                  <div className="glass rounded-2xl p-6">
-                    <div className="text-xs uppercase tracking-widest text-accent">{it.meta}</div>
-                    <h3 className="mt-2 font-semibold text-lg">{it.title}</h3>
-                    <p className="text-muted-foreground text-sm mt-1">{it.org}</p>
-                  </div>
+                  <TiltCard className="card-3d hover-glow inline-block w-full">
+                    <div className="glass rounded-2xl p-6 text-left">
+                      <div className="text-xs uppercase tracking-widest text-accent">{it.meta}</div>
+                      <h3 className="mt-2 font-semibold text-lg">{it.title}</h3>
+                      <p className="text-muted-foreground text-sm mt-1">{it.org}</p>
+                    </div>
+                  </TiltCard>
                 </div>
               </div>
             ))}
@@ -427,24 +478,26 @@ function Experience() {
         <SectionHeader eyebrow="Experience" title="Work that delivers results" />
         <div className="grid md:grid-cols-2 gap-6">
           {roles.map((r) => (
-            <div key={r.title} data-reveal className="reveal glass rounded-2xl p-8 hover:shadow-glow transition-shadow">
-              <div className="flex items-center gap-3">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-glow">
-                  <r.icon className="h-5 w-5" />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-lg truncate">{r.title}</h3>
-                  <p className="text-sm text-muted-foreground truncate">{r.org}</p>
+            <TiltCard key={r.title} data-reveal className="reveal card-3d hover-glow">
+              <div className="glass rounded-2xl p-8">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-glow">
+                    <r.icon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-lg truncate">{r.title}</h3>
+                    <p className="text-sm text-muted-foreground truncate">{r.org}</p>
+                  </div>
                 </div>
+                <ul className="mt-6 grid gap-2">
+                  {r.bullets.map((b) => (
+                    <li key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {b}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="mt-6 grid gap-2">
-                {r.bullets.map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -464,24 +517,26 @@ function Skills() {
             { title: "Technical", icon: Cpu, items: tech },
             { title: "Marketing", icon: TrendingUp, items: marketing },
           ].map((g) => (
-            <div key={g.title} data-reveal className="reveal glass rounded-2xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-accent shadow-glow-purple">
-                  <g.icon className="h-5 w-5" />
-                </span>
-                <h3 className="font-semibold text-xl">{g.title} Skills</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {g.items.map((s) => (
-                  <span
-                    key={s}
-                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-gradient-primary hover:border-transparent transition-all cursor-default"
-                  >
-                    {s}
+            <TiltCard key={g.title} data-reveal className="reveal card-3d hover-glow">
+              <div className="glass rounded-2xl p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-accent shadow-glow-purple">
+                    <g.icon className="h-5 w-5" />
                   </span>
-                ))}
+                  <h3 className="font-semibold text-xl">{g.title} Skills</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {g.items.map((s) => (
+                    <span
+                      key={s}
+                      className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-gradient-primary hover:border-transparent transition-all cursor-default"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -505,18 +560,16 @@ function Services() {
         <SectionHeader eyebrow="Services" title="What I do for clients" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((s) => (
-            <div
-              key={s.title}
-              data-reveal
-              className="reveal group relative glass rounded-2xl p-6 hover:-translate-y-1 hover:shadow-glow transition-all"
-            >
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-primary/10 pointer-events-none" />
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-glow">
-                <s.icon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-5 font-semibold text-lg">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-            </div>
+            <TiltCard key={s.title} data-reveal className="reveal card-3d hover-glow group relative">
+              <div className="glass rounded-2xl p-6 transition-all">
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-primary/10 pointer-events-none" />
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-primary shadow-glow">
+                  <s.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 font-semibold text-lg">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              </div>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -557,43 +610,45 @@ function Projects() {
         <SectionHeader eyebrow="Featured Projects" title="Selected work" />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((p) => (
-            <article key={p.title} data-reveal className="reveal group glass rounded-2xl overflow-hidden hover:shadow-glow transition-all">
-              <div className={`relative h-44 bg-gradient-to-br ${p.accent} overflow-hidden`}>
-                <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:14px_14px]" />
-                <div className="absolute inset-0 grid place-items-center">
-                  <div className="glass-strong rounded-2xl p-5">
-                    {p.title.includes("AI") ? <Cpu className="h-10 w-10" /> : p.title.includes("Ads") ? <Target className="h-10 w-10" /> : <Globe className="h-10 w-10" />}
+            <TiltCard key={p.title} data-reveal className="reveal card-3d hover-glow group">
+              <article className="glass rounded-2xl overflow-hidden transition-all">
+                <div className={`relative h-44 bg-gradient-to-br ${p.accent} overflow-hidden`}>
+                  <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(white_1px,transparent_1px)] [background-size:14px_14px]" />
+                  <div className="absolute inset-0 grid place-items-center">
+                    <div className="glass-strong rounded-2xl p-5">
+                      {p.title.includes("AI") ? <Cpu className="h-10 w-10" /> : p.title.includes("Ads") ? <Target className="h-10 w-10" /> : <Globe className="h-10 w-10" />}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="p-6">
-                <h3 className="font-semibold text-lg">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span key={t} className="rounded-md bg-white/5 border border-white/10 px-2 py-1 text-xs">
-                      {t}
-                    </span>
-                  ))}
+                <div className="p-6">
+                  <h3 className="font-semibold text-lg">{p.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <span key={t} className="rounded-md bg-white/5 border border-white/10 px-2 py-1 text-xs">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-5 flex gap-2">
+                    {p.live && (
+                      <a href={p.live} target="_blank" rel="noreferrer">
+                        <Button size="sm" className="bg-gradient-primary border-0 gap-1.5">
+                          <Globe className="h-3.5 w-3.5" /> Live
+                        </Button>
+                      </a>
+                    )}
+                    {p.gh && (
+                      <a href={p.gh} target="_blank" rel="noreferrer">
+                        <Button size="sm" variant="outline" className="border-white/15 gap-1.5">
+                          <Github className="h-3.5 w-3.5" /> GitHub
+                        </Button>
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <div className="mt-5 flex gap-2">
-                  {p.live && (
-                    <a href={p.live} target="_blank" rel="noreferrer">
-                      <Button size="sm" className="bg-gradient-primary border-0 gap-1.5">
-                        <Globe className="h-3.5 w-3.5" /> Live
-                      </Button>
-                    </a>
-                  )}
-                  {p.gh && (
-                    <a href={p.gh} target="_blank" rel="noreferrer">
-                      <Button size="sm" variant="outline" className="border-white/15 gap-1.5">
-                        <Github className="h-3.5 w-3.5" /> GitHub
-                      </Button>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </article>
+              </article>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -617,12 +672,14 @@ function WhyMe() {
         <SectionHeader eyebrow="Why work with me" title="Built for outcomes, not just output" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((t) => (
-            <div key={t} data-reveal className="reveal glass rounded-xl p-5 flex items-center gap-3 hover:bg-white/[0.06] transition">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-primary shadow-glow">
-                <Zap className="h-4 w-4" />
-              </span>
-              <span className="font-medium">{t}</span>
-            </div>
+            <TiltCard key={t} data-reveal className="reveal card-3d hover-glow">
+              <div className="glass rounded-xl p-5 flex items-center gap-3 transition">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-primary shadow-glow">
+                  <Zap className="h-4 w-4" />
+                </span>
+                <span className="font-medium">{t}</span>
+              </div>
+            </TiltCard>
           ))}
         </div>
       </div>
@@ -674,46 +731,49 @@ function Contact() {
         <div className="grid lg:grid-cols-[1fr_1.2fr] gap-6">
           <div data-reveal className="reveal grid gap-3">
             {cards.map((c) => (
-              <a
-                key={c.label}
-                href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="glass rounded-2xl p-5 flex items-center gap-4 hover:shadow-glow hover:-translate-y-0.5 transition-all"
-              >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <div className="min-w-0">
-                  <div className="text-xs text-muted-foreground">{c.label}</div>
-                  <div className="font-medium truncate">{c.value}</div>
-                </div>
-              </a>
+              <TiltCard key={c.label} className="card-3d hover-glow">
+                <a
+                  href={c.href}
+                  target={c.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                  className="glass rounded-2xl p-5 flex items-center gap-4 transition-all"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
+                    <c.icon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs text-muted-foreground">{c.label}</div>
+                    <div className="font-medium truncate">{c.value}</div>
+                  </div>
+                </a>
+              </TiltCard>
             ))}
           </div>
-          <form data-reveal onSubmit={onSubmit} className="reveal glass-strong rounded-2xl p-6 lg:p-8 space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-muted-foreground">Name</label>
-                <Input name="name" required placeholder="Your name" className="mt-1 bg-white/5 border-white/10" />
+          <TiltCard data-reveal className="reveal card-3d hover-glow">
+            <form onSubmit={onSubmit} className="glass-strong rounded-2xl p-6 lg:p-8 space-y-4 transition-all">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-muted-foreground">Name</label>
+                  <Input name="name" required placeholder="Your name" className="mt-1 bg-white/5 border-white/10" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Email</label>
+                  <Input name="email" type="email" required placeholder="you@email.com" className="mt-1 bg-white/5 border-white/10" />
+                </div>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Email</label>
-                <Input name="email" type="email" required placeholder="you@email.com" className="mt-1 bg-white/5 border-white/10" />
+                <label className="text-xs text-muted-foreground">Subject</label>
+                <Input name="subject" placeholder="Project, role or collaboration" className="mt-1 bg-white/5 border-white/10" />
               </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Subject</label>
-              <Input name="subject" placeholder="Project, role or collaboration" className="mt-1 bg-white/5 border-white/10" />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Message</label>
-              <Textarea name="message" required rows={6} placeholder="Tell me about your project…" className="mt-1 bg-white/5 border-white/10" />
-            </div>
-            <Button type="submit" disabled={sending} size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
-              <Send className="h-4 w-4" /> {sending ? "Sending…" : "Send Message"}
-            </Button>
-          </form>
+              <div>
+                <label className="text-xs text-muted-foreground">Message</label>
+                <Textarea name="message" required rows={6} placeholder="Tell me about your project…" className="mt-1 bg-white/5 border-white/10" />
+              </div>
+              <Button type="submit" disabled={sending} size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
+                <Send className="h-4 w-4" /> {sending ? "Sending…" : "Send Message"}
+              </Button>
+            </form>
+          </TiltCard>
         </div>
       </div>
     </section>
@@ -766,6 +826,15 @@ export function Portfolio() {
       <Footer />
       <Toaster />
       <style>{`
+        @media (prefers-reduced-motion: no-preference) {
+          [data-reveal]:not(.reveal-in) {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          [data-reveal] {
+            transition: opacity .3s ease, transform .3s ease;
+          }
+        }
         .reveal-in { opacity: 1 !important; transform: none !important; }
       `}</style>
     </div>
