@@ -440,11 +440,13 @@ function Education() {
                   <div className={`absolute left-4 md:left-1/2 -translate-x-1/2 grid h-8 w-8 place-items-center rounded-full bg-gradient-primary shadow-glow`}>
                     <it.icon className="h-4 w-4" />
                   </div>
-                  <div className="glass rounded-2xl p-6">
-                    <div className="text-xs uppercase tracking-widest text-accent">{it.meta}</div>
-                    <h3 className="mt-2 font-semibold text-lg">{it.title}</h3>
-                    <p className="text-muted-foreground text-sm mt-1">{it.org}</p>
-                  </div>
+                  <TiltCard className="card-3d hover-glow inline-block w-full">
+                    <div className="glass rounded-2xl p-6 text-left">
+                      <div className="text-xs uppercase tracking-widest text-accent">{it.meta}</div>
+                      <h3 className="mt-2 font-semibold text-lg">{it.title}</h3>
+                      <p className="text-muted-foreground text-sm mt-1">{it.org}</p>
+                    </div>
+                  </TiltCard>
                 </div>
               </div>
             ))}
