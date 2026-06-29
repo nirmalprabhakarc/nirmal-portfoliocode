@@ -727,46 +727,49 @@ function Contact() {
         <div className="grid lg:grid-cols-[1fr_1.2fr] gap-6">
           <div data-reveal className="reveal grid gap-3">
             {cards.map((c) => (
-              <a
-                key={c.label}
-                href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="glass rounded-2xl p-5 flex items-center gap-4 hover:shadow-glow hover:-translate-y-0.5 transition-all"
-              >
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <div className="min-w-0">
-                  <div className="text-xs text-muted-foreground">{c.label}</div>
-                  <div className="font-medium truncate">{c.value}</div>
-                </div>
-              </a>
+              <TiltCard key={c.label} className="card-3d hover-glow">
+                <a
+                  href={c.href}
+                  target={c.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                  className="glass rounded-2xl p-5 flex items-center gap-4 transition-all"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-primary shadow-glow">
+                    <c.icon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs text-muted-foreground">{c.label}</div>
+                    <div className="font-medium truncate">{c.value}</div>
+                  </div>
+                </a>
+              </TiltCard>
             ))}
           </div>
-          <form data-reveal onSubmit={onSubmit} className="reveal glass-strong rounded-2xl p-6 lg:p-8 space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-muted-foreground">Name</label>
-                <Input name="name" required placeholder="Your name" className="mt-1 bg-white/5 border-white/10" />
+          <TiltCard data-reveal className="reveal card-3d hover-glow">
+            <form onSubmit={onSubmit} className="glass-strong rounded-2xl p-6 lg:p-8 space-y-4 transition-all">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-muted-foreground">Name</label>
+                  <Input name="name" required placeholder="Your name" className="mt-1 bg-white/5 border-white/10" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Email</label>
+                  <Input name="email" type="email" required placeholder="you@email.com" className="mt-1 bg-white/5 border-white/10" />
+                </div>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Email</label>
-                <Input name="email" type="email" required placeholder="you@email.com" className="mt-1 bg-white/5 border-white/10" />
+                <label className="text-xs text-muted-foreground">Subject</label>
+                <Input name="subject" placeholder="Project, role or collaboration" className="mt-1 bg-white/5 border-white/10" />
               </div>
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Subject</label>
-              <Input name="subject" placeholder="Project, role or collaboration" className="mt-1 bg-white/5 border-white/10" />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground">Message</label>
-              <Textarea name="message" required rows={6} placeholder="Tell me about your project…" className="mt-1 bg-white/5 border-white/10" />
-            </div>
-            <Button type="submit" disabled={sending} size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
-              <Send className="h-4 w-4" /> {sending ? "Sending…" : "Send Message"}
-            </Button>
-          </form>
+              <div>
+                <label className="text-xs text-muted-foreground">Message</label>
+                <Textarea name="message" required rows={6} placeholder="Tell me about your project…" className="mt-1 bg-white/5 border-white/10" />
+              </div>
+              <Button type="submit" disabled={sending} size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
+                <Send className="h-4 w-4" /> {sending ? "Sending…" : "Send Message"}
+              </Button>
+            </form>
+          </TiltCard>
         </div>
       </div>
     </section>
