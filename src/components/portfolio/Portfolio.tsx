@@ -197,6 +197,15 @@ function Nav() {
             ))}
           </nav>
           <div className="flex items-center gap-2">
+            <a
+              href="https://www.linkedin.com/in/nirmal-prabhakar-chirukuri-8a1827419/"
+              target="_blank"
+              rel="noreferrer"
+              className="grid h-9 w-9 place-items-center rounded-lg glass hover:bg-white/10 transition"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
             <a href="#contact" className="hidden md:inline-flex">
               <Button size="sm" className="bg-gradient-primary border-0 shadow-glow hover:opacity-90">
                 Hire Me
