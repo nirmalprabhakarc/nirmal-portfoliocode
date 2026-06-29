@@ -637,15 +637,34 @@ function WhyMe() {
 }
 
 function Contact() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [sending, setSending] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = fd.get("name");
-    const subject = (fd.get("subject") || "Portfolio inquiry") as string;
-    const message = fd.get("message");
-    const body = `Name: ${name}\n\n${message}`;
-    window.location.href = `mailto:nirmalprabhakarc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    toast.success("Opening your email client…");
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    setSending(true);
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/nirmalprabhakarc@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: fd.get("name"),
+          email: fd.get("email"),
+          subject: (fd.get("subject") as string) || "Portfolio inquiry",
+          message: fd.get("message"),
+          _subject: `Portfolio: ${(fd.get("subject") as string) || "New inquiry"}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      toast.success("Message sent! I'll get back to you soon.");
+      form.reset();
+    } catch {
+      toast.error("Could not send. Please email me directly.");
+    } finally {
+      setSending(false);
+    }
   };
   const cards = [
     { icon: Mail, label: "Email", value: "nirmalprabhakarc@gmail.com", href: "mailto:nirmalprabhakarc@gmail.com" },
@@ -697,8 +716,8 @@ function Contact() {
               <label className="text-xs text-muted-foreground">Message</label>
               <Textarea name="message" required rows={6} placeholder="Tell me about your project…" className="mt-1 bg-white/5 border-white/10" />
             </div>
-            <Button type="submit" size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
-              <Send className="h-4 w-4" /> Send Message
+            <Button type="submit" disabled={sending} size="lg" className="w-full bg-gradient-primary border-0 shadow-glow hover:opacity-90 gap-2">
+              <Send className="h-4 w-4" /> {sending ? "Sending…" : "Send Message"}
             </Button>
           </form>
         </div>
