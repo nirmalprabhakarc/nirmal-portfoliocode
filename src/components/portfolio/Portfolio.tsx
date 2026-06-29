@@ -43,6 +43,10 @@ const NAV = [
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    if (typeof IntersectionObserver === "undefined") {
+      els.forEach((el) => el.classList.add("reveal-in"));
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -52,10 +56,20 @@ function useReveal() {
           }
         }
       },
-      { threshold: 0.12 },
+      { threshold: 0.05, rootMargin: "0px 0px -5% 0px" },
     );
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    // Safety: if for any reason an element hasn't revealed after 1.5s, force it.
+    const t = window.setTimeout(() => {
+      document.querySelectorAll<HTMLElement>("[data-reveal]:not(.reveal-in)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight) el.classList.add("reveal-in");
+      });
+    }, 1500);
+    return () => {
+      window.clearTimeout(t);
+      io.disconnect();
+    };
   }, []);
 }
 
@@ -739,7 +753,15 @@ export function Portfolio() {
       <Footer />
       <Toaster />
       <style>{`
-        .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+        @media (prefers-reduced-motion: no-preference) {
+          [data-reveal]:not(.reveal-in) {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          [data-reveal] {
+            transition: opacity .7s ease, transform .7s ease;
+          }
+        }
         .reveal-in { opacity: 1 !important; transform: none !important; }
       `}</style>
     </div>
