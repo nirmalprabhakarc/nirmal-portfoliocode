@@ -240,11 +240,6 @@ function Hero() {
                   <Briefcase className="h-4 w-4" /> View Portfolio
                 </Button>
               </a>
-              <a href="/resume.pdf" download>
-                <Button size="lg" variant="outline" className="glass border-white/15 hover:bg-white/5 gap-2">
-                  <Download className="h-4 w-4" /> Download Resume
-                </Button>
-              </a>
               <a href="#contact">
                 <Button size="lg" variant="ghost" className="hover:bg-white/5 gap-2">
                   <Mail className="h-4 w-4" /> Contact Me
