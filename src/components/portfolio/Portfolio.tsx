@@ -56,16 +56,16 @@ function useReveal() {
           }
         }
       },
-      { threshold: 0.05, rootMargin: "0px 0px -5% 0px" },
+      { threshold: 0.01, rootMargin: "0px 0px 200px 0px" },
     );
     els.forEach((el) => io.observe(el));
-    // Safety: if for any reason an element hasn't revealed after 1.5s, force it.
+    // Safety: if for any reason an element hasn't revealed quickly, force it.
     const t = window.setTimeout(() => {
       document.querySelectorAll<HTMLElement>("[data-reveal]:not(.reveal-in)").forEach((el) => {
         const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight) el.classList.add("reveal-in");
+        if (r.top < window.innerHeight + 400) el.classList.add("reveal-in");
       });
-    }, 1500);
+    }, 300);
     return () => {
       window.clearTimeout(t);
       io.disconnect();
@@ -759,7 +759,7 @@ export function Portfolio() {
             transform: translateY(24px);
           }
           [data-reveal] {
-            transition: opacity .7s ease, transform .7s ease;
+            transition: opacity .3s ease, transform .3s ease;
           }
         }
         .reveal-in { opacity: 1 !important; transform: none !important; }
