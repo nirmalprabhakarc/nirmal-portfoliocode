@@ -766,15 +766,6 @@ export function Portfolio() {
       <Footer />
       <Toaster />
       <style>{`
-        @media (prefers-reduced-motion: no-preference) {
-          [data-reveal]:not(.reveal-in) {
-            opacity: 0;
-            transform: translateY(24px);
-          }
-          [data-reveal] {
-            transition: opacity .3s ease, transform .3s ease;
-          }
-        }
         .reveal-in { opacity: 1 !important; transform: none !important; }
       `}</style>
     </div>
