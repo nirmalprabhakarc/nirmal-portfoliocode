@@ -1,6 +1,14 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -64,30 +72,31 @@
 :root {
   --radius: 0.875rem;
   /* Dark premium portfolio palette */
-  --background: oklch(0.13 0.02 265);          /* #0A0A0A-ish deep */
+  /* Midnight + Lime */
+  --background: oklch(0.13 0.01 260);           /* #0A0A0A */
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.18 0.025 265);                /* #111827 */
+  --card: oklch(0.19 0.02 260);                 /* #111827 */
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.18 0.025 265);
+  --popover: oklch(0.19 0.02 260);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.2 260);               /* Electric Blue #3B82F6 */
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.22 0.03 265);
+  --primary: oklch(0.87 0.21 128);              /* Lime #A3E635 */
+  --primary-foreground: oklch(0.16 0.02 260);
+  --secondary: oklch(0.22 0.025 260);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.22 0.03 265);
-  --muted-foreground: oklch(0.78 0.02 260);     /* light gray #D1D5DB */
-  --accent: oklch(0.7 0.18 200);                /* Cyan #06B6D4 */
-  --accent-foreground: oklch(0.13 0.02 265);
+  --muted: oklch(0.22 0.025 260);
+  --muted-foreground: oklch(0.78 0.02 260);
+  --accent: oklch(0.83 0.13 195);               /* Cyan #22D3EE */
+  --accent-foreground: oklch(0.16 0.02 260);
   --destructive: oklch(0.65 0.25 27);
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.65 0.2 260);
-  --purple: oklch(0.6 0.22 295);                /* #8B5CF6 */
-  --gradient-primary: linear-gradient(135deg, oklch(0.65 0.2 260), oklch(0.6 0.22 295));
-  --gradient-accent: linear-gradient(135deg, oklch(0.7 0.18 200), oklch(0.65 0.2 260), oklch(0.6 0.22 295));
-  --shadow-glow: 0 0 40px -8px oklch(0.65 0.2 260 / 0.55);
-  --shadow-glow-purple: 0 0 50px -10px oklch(0.6 0.22 295 / 0.55);
+  --ring: oklch(0.87 0.21 128);
+  --purple: oklch(0.83 0.13 195);               /* alias kept = cyan */
+  --gradient-primary: linear-gradient(135deg, oklch(0.87 0.21 128), oklch(0.83 0.13 195));
+  --gradient-accent: linear-gradient(135deg, oklch(0.83 0.13 195), oklch(0.87 0.21 128));
+  --shadow-glow: 0 0 40px -8px oklch(0.87 0.21 128 / 0.55);
+  --shadow-glow-purple: 0 0 50px -10px oklch(0.83 0.13 195 / 0.55);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -146,21 +155,21 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "DM Sans", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-family: "Space Grotesk", "DM Sans", sans-serif;
     letter-spacing: -0.02em;
   }
 }
 
 @theme inline {
   --color-purple: var(--purple);
-  --font-display: "Space Grotesk", "Inter", sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "DM Sans", sans-serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
 }
 
 /* Premium portfolio utilities */
@@ -219,8 +228,8 @@
   50% { background-position: 100% 50%; }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 30px -8px oklch(0.65 0.2 260 / 0.5); }
-  50% { box-shadow: 0 0 60px -4px oklch(0.6 0.22 295 / 0.7); }
+  0%, 100% { box-shadow: 0 0 30px -8px oklch(0.87 0.21 128 / 0.5); }
+  50% { box-shadow: 0 0 60px -4px oklch(0.83 0.13 195 / 0.7); }
 }
 @keyframes blink {
   50% { opacity: 0; }
