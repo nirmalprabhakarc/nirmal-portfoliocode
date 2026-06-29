@@ -668,12 +668,14 @@ function WhyMe() {
         <SectionHeader eyebrow="Why work with me" title="Built for outcomes, not just output" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((t) => (
-            <div key={t} data-reveal className="reveal glass rounded-xl p-5 flex items-center gap-3 hover:bg-white/[0.06] transition">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-primary shadow-glow">
-                <Zap className="h-4 w-4" />
-              </span>
-              <span className="font-medium">{t}</span>
-            </div>
+            <TiltCard key={t} data-reveal className="reveal card-3d hover-glow">
+              <div className="glass rounded-xl p-5 flex items-center gap-3 transition">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-primary shadow-glow">
+                  <Zap className="h-4 w-4" />
+                </span>
+                <span className="font-medium">{t}</span>
+              </div>
+            </TiltCard>
           ))}
         </div>
       </div>
